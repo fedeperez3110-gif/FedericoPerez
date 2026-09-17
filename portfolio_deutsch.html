@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Federico Pérez — Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:        #0F1B2D;   /* Blaupause-Marineblau */
+    --bg-panel:  #142338;   /* etwas hellere Fläche */
+    --paper:     #ECEFF3;   /* Zeichenpapier-Abschnitt */
+    --paper-ink: #16263D;   /* Text auf Papier-Abschnitten */
+    --ink:       #ECEEF1;   /* Haupttext auf Marineblau */
+    --ink-soft:  #93A6BA;   /* gedämpfter Text auf Marineblau */
+    --accent:    #F5A623;   /* Signal-Amber — sparsam verwenden */
+    --trace:     #4C7EA0;   /* Schaltplan-Linienfarbe */
+    --line:      rgba(255,255,255,0.14);
+    --line-soft: rgba(255,255,255,0.08);
+    --radius:    2px;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+  }
+
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+
+  :focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- Schriftfeld (angelehnt an technische Zeichnungen) ---------- */
+  .title-block{
+    border-bottom:1px solid var(--line);
+    padding:20px 0;
+  }
+  .title-block .wrap{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:16px 32px;
+    align-items:end;
+  }
+  .title-block h1{
+    font-family:var(--mono);
+    font-size:clamp(1.5rem, 3vw, 2.1rem);
+    font-weight:600;
+    margin:0 0 4px;
+    letter-spacing:-0.01em;
+  }
+  .title-block .role{
+    color:var(--ink-soft);
+    font-size:1rem;
+    margin:0;
+  }
+  .stamp{
+    font-family:var(--mono);
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    display:grid;
+    grid-template-columns:auto auto;
+    gap:2px 10px;
+    text-align:right;
+  }
+  .stamp span:nth-child(odd){ color:var(--trace); }
+
+  nav.tabs{
+    border-bottom:1px solid var(--line);
+    background:var(--bg-panel);
+  }
+  nav.tabs .wrap{
+    display:flex;
+    gap:4px;
+    flex-wrap:wrap;
+  }
+  nav.tabs a{
+    font-family:var(--mono);
+    font-size:0.8rem;
+    text-decoration:none;
+    color:var(--ink-soft);
+    padding:12px 14px;
+    border-right:1px solid var(--line-soft);
+  }
+  nav.tabs a:hover{ color:var(--ink); background:rgba(255,255,255,0.03); }
+
+  /* ---------- Leiterbahn-Trenner: eine bewusste Lade-Animation ---------- */
+  .trace-divider{
+    height:2px;
+    width:100%;
+    display:block;
+  }
+  .trace-divider path{
+    stroke:var(--trace);
+    stroke-width:2;
+    fill:none;
+    stroke-dasharray:1000;
+    stroke-dashoffset:1000;
+    animation:draw 1.4s ease-out forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  section{ padding:64px 0; }
+  section h2{
+    font-family:var(--mono);
+    font-size:0.85rem;
+    letter-spacing:0.02em;
+    color:var(--trace);
+    margin:0 0 28px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--line);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero p.lede{
+    font-size:1.15rem;
+    max-width:62ch;
+    color:var(--ink);
+    margin:0 0 28px;
+  }
+  .btn-row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono);
+    font-size:0.85rem;
+    text-decoration:none;
+    padding:11px 18px;
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    color:var(--ink);
+    transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover{ border-color:var(--trace); background:rgba(76,126,160,0.1); }
+  .btn.primary{
+    background:var(--accent);
+    color:#1A1200;
+    border-color:var(--accent);
+    font-weight:600;
+  }
+  .btn.primary:hover{ background:#FFB94A; border-color:#FFB94A; }
+
+  /* ---------- Über mich (Papier-Abschnitt, alternative Farbgebung) ---------- */
+  .about-section{
+    background:var(--paper);
+    color:var(--paper-ink);
+  }
+  .about-section h2{ color:#5C7A93; border-color:rgba(22,38,61,0.15); }
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:40px;
+  }
+  .about-grid p{ margin:0 0 14px; max-width:56ch; }
+  .spec-box{
+    border:1px solid rgba(22,38,61,0.2);
+    padding:18px 20px;
+    height:fit-content;
+  }
+  .spec-box dt{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    color:#5C7A93;
+    margin-top:12px;
+  }
+  .spec-box dt:first-child{ margin-top:0; }
+  .spec-box dd{ margin:2px 0 0; font-weight:500; }
+
+  /* ---------- Fähigkeiten (Bauteil-Modul-Stil) ---------- */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .skill-module{
+    background:var(--bg);
+    padding:20px;
+  }
+  .skill-module h3{
+    font-family:var(--mono);
+    font-size:0.8rem;
+    color:var(--accent);
+    margin:0 0 12px;
+    font-weight:500;
+  }
+  .skill-module ul{ margin:0; padding:0; list-style:none; }
+  .skill-module li{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    padding:4px 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .skill-module li:first-child{ border-top:none; }
+
+  /* ---------- Projekte ---------- */
+  .projects{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:20px;
+  }
+  .project{
+    border:1px solid var(--line);
+    padding:22px;
+    position:relative;
+  }
+  /* Steckerpin-Zacken, angelehnt an Schaltplan-Footprints */
+  .project::before, .project::after{
+    content:"";
+    position:absolute;
+    top:-1px; bottom:-1px;
+    width:6px;
+    background:repeating-linear-gradient(var(--bg-panel) 0 4px, transparent 4px 8px);
+  }
+  .project::before{ left:-6px; }
+  .project::after{ right:-6px; }
+  .project h3{
+    font-family:var(--mono);
+    font-size:1rem;
+    margin:0 0 8px;
+  }
+  .project p{ color:var(--ink-soft); font-size:0.92rem; margin:0 0 14px; }
+  .tags{ display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+  .tags span{
+    font-family:var(--mono);
+    font-size:0.7rem;
+    color:var(--trace);
+    border:1px solid var(--trace);
+    padding:2px 7px;
+    border-radius:var(--radius);
+  }
+  .project .links{ display:flex; gap:14px; }
+  .project .links a{
+    font-size:0.82rem;
+    text-decoration:underline;
+    text-decoration-color:var(--line);
+    color:var(--ink);
+  }
+
+  /* ---------- Zeitleiste (wirklich sequentiell -> Nummerierung ist gerechtfertigt) ---------- */
+  .timeline{
+    list-style:none;
+    margin:0;
+    padding:0;
+    border-left:1px solid var(--line);
+  }
+  .timeline-item{
+    position:relative;
+    padding:0 0 32px 28px;
+  }
+  .timeline-item:last-child{ padding-bottom:0; }
+  .timeline-item::before{
+    content:attr(data-index);
+    position:absolute;
+    left:-13px;
+    top:0;
+    width:24px;
+    height:24px;
+    background:var(--bg);
+    border:1px solid var(--trace);
+    color:var(--trace);
+    font-family:var(--mono);
+    font-size:0.7rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .timeline-item .when{
+    font-family:var(--mono);
+    font-size:0.75rem;
+    color:var(--ink-soft);
+  }
+  .timeline-item h3{ margin:4px 0 6px; font-size:1rem; }
+  .timeline-item p{ margin:0; color:var(--ink-soft); font-size:0.92rem; max-width:60ch; }
+
+  /* ---------- Fußzeilen-Stempel ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0;
+  }
+  footer .wrap{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  footer a{ text-decoration:none; }
+  .contact-list{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    font-family:var(--mono);
+    font-size:0.82rem;
+  }
+  .contact-list a:hover{ color:var(--accent); }
+  footer .location{ font-size:0.8rem; color:var(--ink-soft); }
+
+  @media (max-width:720px){
+    .title-block .wrap{ grid-template-columns:1fr; }
+    .stamp{ text-align:left; }
+    .about-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="title-block">
+  <div class="wrap">
+    <div>
+      <h1>Federico Pérez Cortés</h1>
+      <p class="role">Praktikant Mechatronik</p>
+    </div>
+    <div class="stamp">
+      <span>DOK:</span><span>PORTFOLIO</span>
+      <span>DATUM:</span><span>September 2026</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <a href="#about">Über mich</a>
+    <a href="#skills">Fähigkeiten</a>
+    <a href="#projects">Projekte</a>
+    <a href="#experience">Werdegang</a>
+    <a href="#contact">Kontakt</a>
+  </div>
+</nav>
+
+<svg class="trace-divider" viewBox="0 0 920 2" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,1 L920,1" />
+</svg>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="lede">Student der Mechatronik aus Medellin, Kolumbien. Besonders interessiert in Bereiche wie Elektronik, Robotik, Automatisierung, Steuerungstechnik und Data Engineering. Fließend in Deutsch, Englisch und Spanisch.</p>
+    <div class="btn-row">
+      <a class="btn primary" href="[link-zu-deinem-lebenslauf.pdf]">Lebenslauf herunterladen</a>
+      <a class="btn" href="mailtto:fedeperez3110@gmail.com">E-Mail schreiben</a>
+      <a class="btn" href="www.linkedin.com/in/federico-perez-cortes">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <h2>Über mich</h2>
+      <p>Ich bin Federico, ein Student von Mechatronik in der Universidad EIA aus Medellin, Kolumbien. Ich habe praktische Erfahrung in Automatisierung, Robotik, Elektronik und Data Engineering, und habe an verschiedenen Projekte gearbeitet, wie z.B. am Bau von zwei Roboter.</p>
+      <p>Von einem Praktikum erhoffe ich mir sowohl neue Herausforderungen zu finden, von den ich viel lernen kann, als auch schöne Erlebnisse mit neuen Menschen in Deutschland und zu haben</p>
+    </div>
+    <dl class="spec-box">
+      <dt>Studiengang</dt><dd>Mechatronik</dd>
+      <dt>Hochschule</dt><dd>Universidad EIA</dd>
+      <dt>Voraussichtlicher Abschluss</dt><dd>Juli 2027</dd>
+      <dt>Standort</dt><dd>Medellin, Kolumbien</dd>
+      <dt>Verfügbarkeit</dt><dd>ab Januar 2027, Vollzeit</dd>
+    </dl>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <h2>Fähigkeiten</h2>
+    <div class="skills-grid">
+      <div class="skill-module">
+        <h3>Robotik, Steuerung &amp; Automatisierung</h3>
+        <ul>
+          <li>TIA Portal</li>
+          <li>Ladder</li>
+          <li>ROS2</li>
+          <li>MatLab</li>
+        </ul>
+      </div>
+      <div class="skill-module">
+        <h3>Daten &amp; KI</h3>
+        <ul>
+          <li>Databases</li>
+          <li>Pandas for Python</li>
+          <li>SQL</li>
+          <li>Claude</li>
+          <li>ChatGPT</li>
+        </ul>
+      </div>
+      <div class="skill-module">
+        <h3>Embedded / Hardware</h3>
+        <ul>
+          <li>Sensorik und Aktorik</li>
+          <li>C++</li>
+          <li>KiCad for PCB Design</li>
+        </ul>
+      </div>
+      <div class="skill-module">
+        <h3>[Fachbereich — z. B. Software]</h3>
+        <ul>
+          <li>Python</li>
+          <li>Autodesk Fusion/Inventor</li>
+          <li>SQL Server Management Studio</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <h2>Projekte</h2>
+    <div class="projects">
+
+      <!-- Diesen <article>-Block für jedes weitere Projekt kopieren -->
+      <article class="project">
+        <h3>PRR Scara Roboter</h3>
+        <p>In einem Team von vier Personen haben wir ein SCARA Roboter mit einer PRR-Anordnung ganz vom Anfang gebaut. Ich war für die ganze Elektronik des Roboters verantwortlich.</p>
+        <div class="tags">
+          <span>ROS2</span>
+          <span>KiCad</span>
+          <span>Autodesk Fusion</span>
+        </div>
+        <div class="links">
+          <a href="[demo-oder-bericht-url]">Mehr erfahren</a>
+        </div>
+      </article>
+
+      <article class="project">
+        <h3>Differentialantrieb-Roboter</h3>
+        <p>In einem Team von vier Personen haben wir ein Differentialantrieb-Roboter mit zwei Motoren und mehrere Sensoren ganz vom Anfang gebaut. Ich war für die ganze Elektronik des Roboters verantwortlich.</p>
+        <div class="tags">
+          <span>ROS2</span>
+          <span>KiCad</span>
+          <span>Autodesk Fusion</span>
+        </div>
+        <div class="links">
+          <a href="[demo-oder-bericht-url]">Mehr erfahren</a>
+        </div>
+      </article>
+
+      <article class="project">
+        <h3>Altes Plattenspieler</h3>
+        <p>Ich habe ein alte Plattenspieler genommen, alle die Fehlerdiagnose gemacht und es restauriert. Gerade funktioniert das Plattenspieler gut und wird auch weiterentiwckelt.</p>
+        <div class="tags">
+          <span>KiCad</span>
+          <span>Autodesk Fusion</span>
+        </div>
+        <div class="links">
+          <a href="[demo-oder-bericht-url]">Mehr erfahren</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <h2>Werdegang &amp; Ausbildung</h2>
+    <ol class="timeline">
+
+      <!-- Diesen <li>-Block für jeden weiteren Eintrag kopieren, neueste zuerst -->
+      <li class="timeline-item" data-index="1">
+        <span class="when">06.2022 — 07.2027</span>
+        <h3>Mechatronik (B.Sc) · Universidad EIA</h3>
+        <p>Schwerpunkt: Elektronik, Robotik, IoT, Steuerungstechnik, industrielles Automatisierung</p>
+      </li>
+
+      <li class="timeline-item" data-index="2">
+        <span class="when">07.2025 — 12.2026]</span>
+        <h3>Minor in Data Analytics & KI · Universidad EIA</h3>
+        <p>Schwerpunkt: Datenbanken, Datenanalyse, Data Engineering, Künstliche Intelligenz</p>
+      </li>
+
+      <li class="timeline-item" data-index="3">
+        <span class="when">01.2025 — 12.2025</span>
+        <h3>Junior-Dateningenieur · Bajo Tierra Construcción y Minería S.A.</h3>
+        <p>Entwarf und entwickelte ein automatisiertes System zur Erfassung und Verwaltung von Daten schwerer Baumaschinen (u. a. Kraftstoff- und Ölverbrauch, Standort, Betriebszeit, OPEX), inklusive Datenbankaufbau und Auswertung in Python als Entscheidungsgrundlage.</p>
+      </li>
+
+    </ol>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="contact-list">
+      <a href="mailto:fedeperez3110@gmail.com">fedeperez3110@gmail.com</a>
+      <a href="tel:+57 316 6907604">+57 316 6907604</a>
+      <a href="www.linkedin.com/in/federico-perez-cortes">LinkedIn</a>
+    </div>
+    <span class="location">Medellin, Kolumbien</span>
+  </div>
+</footer>
+
+<script>
+  function prefersReducedMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function initTraceReplay() {
+    if (prefersReducedMotion()) return;
+    var divider = document.querySelector('.trace-divider path');
+    if (!divider) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          divider.style.animation = 'none';
+          // Reflow erzwingen, damit die Animation neu startet
+          void divider.getBoundingClientRect();
+          divider.style.animation = '';
+        }
+      });
+    }, { threshold: 1 });
+
+    observer.observe(divider);
+  }
+
+  document.addEventListener('DOMContentLoaded', initTraceReplay);
+</script>
+
+</body>
+</html>
